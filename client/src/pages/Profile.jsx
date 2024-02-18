@@ -12,6 +12,12 @@ import {
   updateUserFailure,
   updateUserSucess,
   updateUserStart,
+  deleteUserFailure,
+  deleteUserSucess,
+  deleteUserStart,
+  signoutUserFailure,
+  signoutUserSucess,
+  signoutUserStart,
 } from "../redux/user/userSlice";
 import axios from "axios";
 const Profile = () => {
@@ -76,6 +82,34 @@ const Profile = () => {
       dispatch(updateUserSucess(data));
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`);
+      const data = res.data;
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSucess());
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+  const handleSignOut = async () => {
+    try {
+      dispatch(signoutUserStart());
+      const res = await axios.get("/api/user/signout");
+      const data = res.data;
+      if (data.success === false) {
+        dispatch(signoutUserFailure(data.message));
+        return;
+      }
+      dispatch(signoutUserSucess());
+    } catch (error) {
+      dispatch(signoutUserFailure(error.message));
     }
   };
   return (
@@ -153,10 +187,18 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex gap-2 my-4 justify-between">
-        <p className="font-semibold text-red-700">Delete account?</p>
-        <Link to="/sign-up">
-          <span className="text-red-700 font-semibold">Sign out</span>
-        </Link>
+        <span
+          className="font-semibold text-red-700 cursor-pointer"
+          onClick={handleDelete}
+        >
+          Delete account?
+        </span>
+        <span
+          className="text-red-700 font-semibold cursor-pointer"
+          onClick={handleSignOut}
+        >
+          Sign out
+        </span>
       </div>
     </div>
   );
