@@ -7,6 +7,7 @@ import {
   signInSucess,
 } from "../redux/user/userSlice";
 import axios from "axios";
+import OAuth from "../components/OAuth";
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
@@ -43,7 +44,6 @@ const SignIn = () => {
           placeholder="Email"
           className="border p-3 rounded-lg focus:outline-none"
           onChange={handleChange}
-          required
         />
         <input
           type="password"
@@ -52,7 +52,6 @@ const SignIn = () => {
           placeholder="Password"
           className="border p-3 rounded-lg focus:outline-none"
           onChange={handleChange}
-          required
         />
         <button
           disabled={loading}
@@ -61,12 +60,7 @@ const SignIn = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <button
-          disabled
-          className=" bg-red-700 text-white p-3 hover:opacity-95 uppercase disabled:opacity-85 rounded-lg"
-        >
-          Continue with Google
-        </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 my-4">
         <p className=" font-semibold">Dont have an account?</p>

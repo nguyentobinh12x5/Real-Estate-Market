@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import OAuth from "../components/OAuth";
 const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
@@ -63,12 +64,7 @@ const SignUp = () => {
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>
-        <button
-          disabled
-          className=" bg-red-700 text-white p-3 hover:opacity-95 uppercase disabled:opacity-85 rounded-lg"
-        >
-          Continue with Google
-        </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 my-4">
         <p className=" font-semibold">Have an account?</p>
