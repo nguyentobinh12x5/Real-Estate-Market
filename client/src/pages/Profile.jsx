@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   getStorage,
@@ -8,16 +8,24 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateUserFailure,
+  updateUserSucess,
+  updateUserStart,
+} from "../redux/user/userSlice";
+import axios from "axios";
 const Profile = () => {
   //request.resource.size < 2 * 1024 * 1024 &&
   //request.resource.contentType.matches('image/.*')
+  const dispatch = useDispatch();
   const fileRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePer] = useState(0);
   const [formData, setFormData] = useState({});
   const [fileUploadError, setFileUploadError] = useState(false);
-  console.log(filePerc);
+  console.log(formData);
   const handleFileUpLoad = (file) => {
     const storage = getStorage(app);
     const name = new Date().getTime() + file.name;
@@ -49,10 +57,31 @@ const Profile = () => {
       handleFileUpLoad(file);
     }
   }, [file]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSucess(data));
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           ref={fileRef}
@@ -118,6 +147,7 @@ const Profile = () => {
         <button
           className=" bg-green-600 text-white p-3 hover:opacity-95 uppercase disabled:opacity-85 rounded-lg"
           type="submit"
+          disabled
         >
           Create Listing
         </button>
