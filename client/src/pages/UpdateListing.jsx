@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -9,7 +9,8 @@ import {
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import axios from "axios";
-const CreateListing = () => {
+const UpdateListing = () => {
+  const { id } = useParams();
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const CreateListing = () => {
     bedrooms: 1,
     bathrooms: 1,
     regularPrice: 50,
-    discountPrice: 40,
+    discountPrice: 0,
     offer: false,
     parking: false,
     furnished: false,
@@ -31,6 +32,18 @@ const CreateListing = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const res = await axios.get(`/api/listing/get/${id}`);
+        const data = res.data;
+        setFormData(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchListing();
+  }, []);
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
@@ -118,7 +131,7 @@ const CreateListing = () => {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await axios.post("/api/listing/create", {
+      const res = await axios.post(`/api/listing/update/${id}`, {
         ...formData,
         userRef: currentUser._id,
       });
@@ -136,7 +149,7 @@ const CreateListing = () => {
   return (
     <div className="max-w-4xl mx-auto p-3">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
+        Update Listing
       </h1>
       <form className="flex flex-col gap-4 sm:flex-row" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 flex-1">
@@ -341,4 +354,4 @@ const CreateListing = () => {
   );
 };
 
-export default CreateListing;
+export default UpdateListing;
