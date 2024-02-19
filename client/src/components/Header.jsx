@@ -28,6 +28,11 @@ const Header = () => {
           <Link to="/about">
             <li className="hidden sm:inline hover:underline">About</li>
           </Link>
+          <Link to="/create-listing">
+            {currentUser && (
+              <li className=" text-slate-700 hover:underline">Create</li>
+            )}
+          </Link>
           <Link to="/profile">
             {currentUser ? (
               <img

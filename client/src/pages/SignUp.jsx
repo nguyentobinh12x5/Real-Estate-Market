@@ -17,7 +17,6 @@ const SignUp = () => {
       setLoading(true);
       const res = await axios.post("/api/auth/signup", formData);
       const data = res.data;
-      console.log(data);
       setLoading(false);
       setError(null);
       navigate("/sign-in");
