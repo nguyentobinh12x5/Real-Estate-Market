@@ -42,7 +42,7 @@ const UserListing = () => {
             key={listing._id}
             className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]"
           >
-            <Link to={`/listing/${listing._id}`}>
+            <Link to={`/listing-detail/${listing._id}`}>
               <img
                 src={listing.imageUrls[0]}
                 alt={listing.name}

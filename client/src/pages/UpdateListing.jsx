@@ -346,7 +346,14 @@ const UpdateListing = () => {
             type="submit"
             disabled={loading}
           >
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? "Updating..." : "Update Listing"}
+          </button>
+          <button
+            className="bg-red-700 text-white p-3 rounded-lg"
+            type="submit"
+            onClick={() => navigate(`/user/listings/${currentUser._id}`)}
+          >
+            Cancel
           </button>
         </div>
       </form>

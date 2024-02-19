@@ -47,7 +47,19 @@ export const updateListing = async (req, res, next) => {
 
 export const getListing = async (req, res, next) => {
   try {
-    const listings = await Listing.findById(req.params.id);
+    const listings = await Listing.findById(req.params.id).populate(
+      "userRef",
+      "-password"
+    );
+    res.status(200).json(listings);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getListings = async (req, res, next) => {
+  try {
+    const listings = await Listing.find();
     res.status(200).json(listings);
   } catch (error) {
     next(error);
