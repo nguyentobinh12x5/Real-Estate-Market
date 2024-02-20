@@ -6,7 +6,6 @@ import {
   signInFailure,
   signInSucess,
 } from "../redux/user/userSlice";
-import axios from "axios";
 import OAuth from "../components/OAuth";
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -20,8 +19,14 @@ const SignIn = () => {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await axios.post("/api/auth/signin", formData);
-      const data = res.data;
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         return;
@@ -74,3 +79,5 @@ const SignIn = () => {
 };
 
 export default SignIn;
+//Link validation form
+//https://www.freecodecamp.org/news/how-to-validate-forms-in-react/

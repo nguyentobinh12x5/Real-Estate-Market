@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getStorage,
   ref,
@@ -31,7 +31,7 @@ const Profile = () => {
   const [filePerc, setFilePer] = useState(0);
   const [formData, setFormData] = useState({});
   const [fileUploadError, setFileUploadError] = useState(false);
-  console.log(formData);
+  const navigate = useNavigate();
   const handleFileUpLoad = (file) => {
     const storage = getStorage(app);
     const name = new Date().getTime() + file.name;
@@ -181,7 +181,7 @@ const Profile = () => {
         <button
           className=" bg-green-600 text-white p-3 hover:opacity-95 uppercase disabled:opacity-85 rounded-lg"
           type="submit"
-          disabled
+          onClick={() => navigate("/create-listing")}
         >
           Create Listing
         </button>

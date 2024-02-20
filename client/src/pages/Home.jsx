@@ -10,6 +10,9 @@ const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [offer, setOffer] = useState([]);
+  const [sale, setSale] = useState([]);
+  const [rent, setRent] = useState([]);
   SwiperCore.use([Navigation]);
   useEffect(() => {
     const fetchListings = async () => {
@@ -17,6 +20,9 @@ const Home = () => {
         const response = await axios.get("/api/listing/get");
         const data = response.data;
         setData(data);
+        setOffer(data.filter((item) => item.offer === true));
+        setSale(data.filter((item) => item.type === "sale"));
+        setRent(data.filter((item) => item.type === "rent"));
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -66,7 +72,7 @@ const Home = () => {
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
         {loading && <p className="text-center my-7 text-2xl ">Loading...</p>}
         {error && <p className="text-center my-7 text-2xl ">{error.message}</p>}
-        {data && data.length > 0 && (
+        {offer && offer.length > 0 && (
           <div className="">
             <div className="my-3">
               <h2 className="text-2xl font-semibold text-slate-600">
@@ -80,13 +86,13 @@ const Home = () => {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {data.map((listing) => (
+              {offer.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
           </div>
         )}
-        {data && data.length > 0 && (
+        {rent && rent.length > 0 && (
           <div className="">
             <div className="my-3">
               <h2 className="text-2xl font-semibold text-slate-600">
@@ -100,13 +106,13 @@ const Home = () => {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {data.map((listing) => (
+              {rent.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
           </div>
         )}
-        {data && data.length > 0 && (
+        {sale && sale.length > 0 && (
           <div className="">
             <div className="my-3">
               <h2 className="text-2xl font-semibold text-slate-600">
@@ -120,7 +126,7 @@ const Home = () => {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {data.map((listing) => (
+              {sale.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>

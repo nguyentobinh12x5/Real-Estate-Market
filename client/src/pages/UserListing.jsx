@@ -37,42 +37,50 @@ const UserListing = () => {
     <div className="max-w-6xl mx-auto p-3">
       <h1 className="text-3xl font-semibold text-center my-7">My lists</h1>
       <div className="flex flex-wrap gap-4">
-        {data.map((listing) => (
-          <div
-            key={listing._id}
-            className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]"
-          >
-            <Link to={`/listing-detail/${listing._id}`}>
-              <img
-                src={listing.imageUrls[0]}
-                alt={listing.name}
-                className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"
-              />
-            </Link>
-            <div className="p-3 flex flex-col gap-2 w-full">
-              <p className="truncate text-lg font-semibold text-slate-700">
-                {listing.name}
-              </p>
-              <p className="text-sm text-gray-600 line-clamp-2">
-                {listing.description}
-              </p>
-              <div className="flex gap-4 justify-between">
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className=" text-green-700 font-semibold">
-                    Edit
-                  </button>
-                </Link>
+        {loading && !error && (
+          <p className=" text-xl font-semibold text-slate-700">Loading...</p>
+        )}
+        {!loading && error && (
+          <p className="text-xl font-semibold text-red-700">{error.message}</p>
+        )}
+        {!loading &&
+          !error &&
+          data.map((listing) => (
+            <div
+              key={listing._id}
+              className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]"
+            >
+              <Link to={`/listing-detail/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt={listing.name}
+                  className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"
+                />
+              </Link>
+              <div className="p-3 flex flex-col gap-2 w-full">
+                <p className="truncate text-lg font-semibold text-slate-700">
+                  {listing.name}
+                </p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {listing.description}
+                </p>
+                <div className="flex gap-4 justify-between">
+                  <Link to={`/update-listing/${listing._id}`}>
+                    <button className=" text-green-700 font-semibold">
+                      Edit
+                    </button>
+                  </Link>
 
-                <button
-                  className=" text-red-700 font-semibold"
-                  onClick={() => handleDelete(listing._id)}
-                >
-                  Delete
-                </button>
+                  <button
+                    className=" text-red-700 font-semibold"
+                    onClick={() => handleDelete(listing._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
