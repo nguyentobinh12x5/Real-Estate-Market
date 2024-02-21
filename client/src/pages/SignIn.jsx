@@ -7,11 +7,19 @@ import {
   signInSucess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 5000,
+    pauseOnHover: true,
+    draggable: true,
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -29,6 +37,7 @@ const SignIn = () => {
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFailure(data.message));
+        toast.error(data.message, toastOptions);
         return;
       }
       dispatch(signInSucess(data));
@@ -36,6 +45,7 @@ const SignIn = () => {
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
+      toast.error(error.message, toastOptions);
     }
   };
   return (
@@ -73,7 +83,7 @@ const SignIn = () => {
           <span className="text-blue-700 font-semibold">Sign up</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
+      <ToastContainer />
     </div>
   );
 };

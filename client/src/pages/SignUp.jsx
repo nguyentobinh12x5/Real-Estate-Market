@@ -1,28 +1,65 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import OAuth from "../components/OAuth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const SignUp = () => {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 5000,
+    pauseOnHover: true,
+    draggable: true,
+  };
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
+
+  // handleValication
+  const handleValidation = () => {
+    const { password, confirmPassword, username, email } = formData;
+    if (!email.includes("@")) {
+      toast.error("Invalid Email, should add @", toastOptions);
+      return false;
+    } else if (password !== confirmPassword) {
+      toast.error("Password and confirm password should be same", toastOptions);
+      return false;
+    } else if (username.length < 3) {
+      toast.error("Username should be atleast 3 characters long", toastOptions);
+      return false;
+    } else if (password.length < 8) {
+      toast.error("Password should be atleast 8 characters long", toastOptions);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      const res = await axios.post("/api/auth/signup", formData);
-      const data = res.data;
-      setLoading(false);
-      setError(null);
-      navigate("/sign-in");
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
+    if (handleValidation()) {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          setLoading(false);
+          toast.error(data.message, toastOptions);
+          return;
+        }
+        setLoading(false);
+        navigate("/sign-in");
+      } catch (error) {
+        setLoading(false);
+        toast.error(error.message, toastOptions);
+      }
     }
   };
   return (
@@ -56,6 +93,15 @@ const SignUp = () => {
           onChange={handleChange}
           required
         />
+        <input
+          type="Password"
+          name="confirmPassword"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          className="border p-3 rounded-lg focus:outline-none"
+          onChange={handleChange}
+          required
+        />
         <button
           disabled={loading}
           className="bg-slate-700 text-white p-3 hover:opacity-95 uppercase disabled:opacity-85 rounded-lg"
@@ -71,7 +117,7 @@ const SignUp = () => {
           <span className="text-blue-700 font-semibold">Sign in</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
+      <ToastContainer />
     </div>
   );
 };
