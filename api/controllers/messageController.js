@@ -3,6 +3,9 @@ import User from "../models/userModel.js";
 import { errorHandler } from "../utils/error.js";
 export const addMessage = async (req, res, next) => {
   const { from, to, message } = req.body;
+  if (req.user.id !== from.toString()) {
+    return next(errorHandler(401, "You not authenticated to send message"));
+  }
   try {
     const newMessage = new Message({
       message: {
@@ -12,22 +15,26 @@ export const addMessage = async (req, res, next) => {
       sender: from,
     });
     const savedMessage = await newMessage.save();
-    console.log(savedMessage);
     if (savedMessage)
       return res.status(201).json({
-        msg: "Message sent successfully",
+        message: "Message sent successfully",
       });
-    return res.status(400).json({
-      msg: "Message not sent",
-    });
+    return next(errorHandler(400, "Message not sent"));
   } catch (error) {
     next(error);
   }
 };
 export const getAllMessages = async (req, res, next) => {
+  const { from, to } = req.body;
+  if (req.user.id !== from.toString()) {
+    return next(
+      errorHandler(
+        401,
+        "You not authenticated to read message in this conversation"
+      )
+    );
+  }
   try {
-    const { from, to } = req.body;
-
     const messages = await Message.find({
       users: {
         $all: [from, to],
@@ -53,32 +60,37 @@ export const getAllUsers = async (req, res, next) => {
       "avatar",
       "_id",
     ]);
-    return res.json(users);
-  } catch (ex) {
-    next(ex);
+    return res.status(200).json(users);
+  } catch (error) {
+    next(error);
   }
 };
-export const getContactList = async (req, res) => {
-  // Lấy userId từ params
+export const getContactList = async (req, res, next) => {
   const userId = req.params.userId;
-
-  // Tìm tất cả các tin nhắn mà người dùng này đã gửi hoặc nhận
-  const messages = await Message.find({
-    $or: [{ sender: userId }, { users: userId }],
-  })
-    .populate("users")
-    .populate("sender");
-
-  // Tạo một set để lưu trữ danh sách liên hệ (để tránh trùng lặp)
-  const contacts = new Set();
-
-  // Duyệt qua tất cả các tin nhắn
-  for (let message of messages) {
-    // Thêm người gửi vào danh sách liên hệ
-    if (message.sender._id.toString() !== userId) {
-      contacts.add(message.sender);
-    }
+  if (req.user.id !== userId.toString()) {
+    return next(errorHandler(401, "You not authenticated"));
   }
-  // Chuyển đổi set thành mảng và gửi kết quả
-  res.status(200).json(Array.from(contacts));
+  try {
+    // Tìm tất cả các tin nhắn mà người dùng này đã gửi hoặc nhận
+    const messages = await Message.find({
+      $or: [{ sender: userId }, { users: userId }],
+    })
+      .populate("users")
+      .populate("sender");
+
+    // Tạo một set để lưu trữ danh sách liên hệ (để tránh trùng lặp)
+    const contacts = new Set();
+
+    // Duyệt qua tất cả các tin nhắn
+    for (let message of messages) {
+      // Thêm người gửi vào danh sách liên hệ
+      if (message.sender._id.toString() !== userId) {
+        contacts.add(message.sender);
+      }
+    }
+    // Chuyển đổi set thành mảng và gửi kết quả
+    res.status(200).json(Array.from(contacts));
+  } catch (error) {
+    next(error);
+  }
 };

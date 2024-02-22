@@ -60,7 +60,7 @@ const ChatContainer = ({ currentChat, socket }) => {
               src={currentChat.avatar}
               alt=""
             />
-            <h3>{currentChat.username}</h3>
+            <h3 className="md-hidden">{currentChat.username}</h3>
           </div>
         )}
       </div>

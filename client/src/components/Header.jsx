@@ -56,13 +56,19 @@ const Header = () => {
           {currentUser ? (
             <>
               <Link to={`/user/listings/${currentUser._id}`}>
-                <li className=" text-slate-700 hover:underline">My Lists</li>
+                <li className=" text-slate-700 hover:underline hidden sm:inline">
+                  My Lists
+                </li>
               </Link>
               <Link to="/create-listing">
-                <li className=" text-slate-700 hover:underline">Create</li>
+                <li className=" text-slate-700 hover:underline hidden sm:inline">
+                  Create
+                </li>
               </Link>
               <Link to="/chat">
-                <li className=" text-slate-700 hover:underline">Chat</li>
+                <li className=" text-slate-700 hover:underline hidden sm:inline">
+                  Chat
+                </li>
               </Link>
               <Link to="/profile">
                 <img
@@ -74,7 +80,9 @@ const Header = () => {
             </>
           ) : (
             <Link to="/profile">
-              <li className=" text-slate-700 hover:underline">Sign in</li>
+              <li className=" text-slate-700 hover:underline hidden sm:inline">
+                Sign in
+              </li>
             </Link>
           )}
         </ul>

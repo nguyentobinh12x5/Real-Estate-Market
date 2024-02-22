@@ -22,7 +22,7 @@ const ChatContact = ({ contacts, changeChat }) => {
                   key={contact._id}
                   className={`contact ${
                     index === currentSelected ? "bg-[#9a86f3]" : "bg-[#ffffff]"
-                  } min-h-[5rem] cursor-pointer w-[90%] rounded-lg p-3 flex gap-4 items-center transition-all duration-500`}
+                  } min-h-[5rem] cursor-pointer w-[90%] rounded-lg p-3 flex gap-4 items-center justify-center transition-all duration-500`}
                   onClick={() => changeCurrentChat(index, contact)}
                 >
                   <img
@@ -30,7 +30,7 @@ const ChatContact = ({ contacts, changeChat }) => {
                     src={contact.avatar}
                     alt=""
                   />
-                  <h3>{contact.username}</h3>
+                  <h3 className="max-md:hidden">{contact.username}</h3>
                 </div>
               );
             })}

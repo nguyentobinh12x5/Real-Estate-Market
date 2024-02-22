@@ -109,14 +109,16 @@ const ListingDetail = () => {
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
-            {currentUser && !contact && (
-              <button
-                className="uppercase bg-slate-700 p-3 rounded-lg font-semibold text-white hover:opacity"
-                onClick={() => setContact(true)}
-              >
-                Contact LandLord
-              </button>
-            )}
+            {currentUser &&
+              !contact &&
+              currentUser._id !== listing.userRef._id && (
+                <button
+                  className="uppercase bg-slate-700 p-3 rounded-lg font-semibold text-white hover:opacity"
+                  onClick={() => setContact(true)}
+                >
+                  Contact LandLord
+                </button>
+              )}
             {contact && <Contact listing={listing} />}
           </div>
         </div>

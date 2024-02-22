@@ -28,7 +28,7 @@ export const Chat = () => {
   }, [currentUser]);
   useEffect(() => {
     if (currentUser) {
-      const serverURL = "http://localhost:3000";
+      const serverURL = import.meta.env.VITE_APP_SERVER_URL;
       socket.current = io(serverURL);
       socket.current.emit("add-user", currentUser._id);
     }

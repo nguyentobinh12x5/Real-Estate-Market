@@ -2,6 +2,10 @@ import Listing from "../models/listingModel.js";
 import { errorHandler } from "../utils/error.js";
 import Fuse from "fuse.js";
 export const createListing = async (req, res, next) => {
+  const userRef = req.body.userRef;
+  if (req.user.id !== userRef.toString()) {
+    return next(errorHandler(401, "You are not authenticated to create listing"));
+  }
   try {
     const newListing = new Listing(req.body);
     const savedListing = await newListing.save();

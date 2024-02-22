@@ -140,7 +140,7 @@ const UpdateListing = () => {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/${data._id}`);
+      navigate(`/listing-detail/${data._id}`);
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -260,7 +260,7 @@ const UpdateListing = () => {
               <input
                 type="number"
                 min="1"
-                max="100000"
+                max="1000000"
                 required
                 id="regularPrice"
                 className="p-3 border-gray-300 rounded-lg"
@@ -277,7 +277,7 @@ const UpdateListing = () => {
                 <input
                   type="number"
                   min="1"
-                  max="100000"
+                  max="1000000"
                   required
                   id="discountPrice"
                   className="p-3 border-gray-300 rounded-lg"

@@ -15,7 +15,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT,
     methods: ["GET", "POST"],
   },
 });
@@ -41,7 +41,7 @@ app.use((err, req, res, next) => {
 // Socket.io
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
-  console.log(`User connected ${socket.id}`);
+  //console.log(`User connected ${socket.id}`);
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
@@ -53,9 +53,9 @@ io.on("connection", (socket) => {
       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
     }
   });
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
+  // socket.on("disconnect", () => {
+  //   console.log("Client disconnected");
+  // });
 });
 
 //Connect to MongoDB
