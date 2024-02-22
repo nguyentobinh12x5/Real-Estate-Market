@@ -11,6 +11,7 @@ import UserListing from "./pages/UserListing";
 import UpdateListing from "./pages/UpdateListing";
 import ListingDetail from "./pages/ListingDetail";
 import Search from "./pages/Search";
+import { Chat } from "./pages/Chat";
 export default function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/listing-detail/:id" element={<ListingDetail />} />
         <Route path="/update-listing/:id" element={<UpdateListing />} />
         <Route path="/user/listings/:id" element={<UserListing />} />

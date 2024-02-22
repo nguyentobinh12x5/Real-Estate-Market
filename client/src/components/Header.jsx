@@ -61,6 +61,9 @@ const Header = () => {
               <Link to="/create-listing">
                 <li className=" text-slate-700 hover:underline">Create</li>
               </Link>
+              <Link to="/chat">
+                <li className=" text-slate-700 hover:underline">Chat</li>
+              </Link>
               <Link to="/profile">
                 <img
                   className="rounded-full h-7 w-7 object-cover"

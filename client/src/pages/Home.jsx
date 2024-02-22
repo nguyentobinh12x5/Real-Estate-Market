@@ -54,15 +54,14 @@ const Home = () => {
         <Swiper navigation>
           {data &&
             data.length > 0 &&
-            data.map((listing) => (
-              <SwiperSlide>
+            data.map((listing, index) => (
+              <SwiperSlide key={listing.index}>
                 <div
                   style={{
                     background: `url(${listing.imageUrls[0]}) center no-repeat`,
                     backgroundSize: "cover",
                   }}
                   className="h-[500px]"
-                  key={listing._id}
                 ></div>
               </SwiperSlide>
             ))}
