@@ -43,8 +43,21 @@ const UserListing = () => {
         {!loading && error && (
           <p className="text-xl font-semibold text-red-700">{error.message}</p>
         )}
+        {!loading && !error && data.length === 0 && (
+          <p className="text-xl font-semibold text-slate-700">
+            No listing found, you can create your first listing by clicking on{" "}
+            <Link
+              to="/create-listing"
+              className="text-blue-500 hover:underline cursor-pointer"
+            >
+              this link
+            </Link>
+            .
+          </p>
+        )}
         {!loading &&
           !error &&
+          data.length > 0 &&
           data.map((listing) => (
             <div
               key={listing._id}
