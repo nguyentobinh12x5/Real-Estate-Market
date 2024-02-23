@@ -1,21 +1,21 @@
 # Real Estate Marketplace
 
 This is a web application for a real estate marketplace built using React, Node.js, and MongoDB.
-![alt text](image.png)
-![alt text](image-1.png)
+![alt text](./images/image.png)
+![alt text](./images/image-1.png)
 
 ## Features
 
 - User registration and authentication
-  ![alt text](image-6.png)
+  ![alt text](./images/image-6.png)
 - Property listing and search
-  ![alt text](image-2.png)
+  ![alt text](./images/image-2.png)
 - Property details and image gallery
-  ![alt text](image-5.png)
+  ![alt text](./images/image-5.png)
 - Contact form for property inquiries
-  ![alt text](image-4.png)
+  ![alt text](./images/image-4.png)
 - User dashboard for managing listings and inquiries
-  ![alt text](image-3.png)
+  ![alt text](./images/image-3.png)
 
 ## Technologies Used
 
